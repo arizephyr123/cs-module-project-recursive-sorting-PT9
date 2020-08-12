@@ -4,15 +4,17 @@
 
 def merge_helper(arrA, arrB):
     total = len(arrA) + len(arrB)
-    merged_arr = [0] * total
+    merged_arr = [] 
     a_idx = 0
     b_idx = 0
     while len(merged_arr) < total:
+        # no more in arrA
         if a_idx >= len(arrA):
-            merged_arr.append(b[b_idx])
+            merged_arr.append(arrB[b_idx])
             b_idx += 1
+        # no more in arrB
         elif b_idx >= len(arrB):
-            merged_arr.append(a[a_idx])
+            merged_arr.append(arrA[a_idx])
             a_idx += 1
         elif arrA[a_idx] < arrB[b_idx]:
             merged_arr.append(arrA[a_idx])
@@ -25,21 +27,16 @@ def merge_helper(arrA, arrB):
 # TO-DO: implement the Merge Sort function below recursively
 def merge_sort(arr):
     if len(arr) == 0:
-        return None
+        return []
 
     # base case
-    if len(arr) == 1:
-        return arr
-
-    # recursive
-    else:
+    if len(arr) > 1:
         #divide arr into LHS, RHS
         LHS = arr[:len(arr)//2]
         RHS = arr[len(arr)//2:]
-        print(LHS, RHS)
         # next 2 merge sorts half n per call, so O(log n)
-        merge_sort(LHS)
-        merge_sort(RHS)
+        LHS = merge_sort(LHS)
+        RHS = merge_sort(RHS)
         arr = merge_helper(LHS, RHS) # O(n)
     return arr
 
