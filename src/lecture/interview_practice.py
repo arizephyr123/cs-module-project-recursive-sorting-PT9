@@ -31,6 +31,7 @@ print(area_circle(3))   # 28.274
 # only positive numbers? -> yes
 # return bool? -> yes
 # implement error handling -> not for now, stretch
+'''
 def divides_self(num):
     # copy num
     digits_left = num
@@ -51,7 +52,7 @@ def divides_self(num):
 print(divides_self(128)) # → True
 print(divides_self(12)) # → True
 print(divides_self(120)) # → False
-
+'''
 
 
 # Ex. 3
@@ -78,4 +79,106 @@ def naive_knapsack(weight_limit, items):
 
     return sack
 
-    
+import itertools
+# knapsack problem - brute force
+# brute fore is like guess and check
+def knapsack_brute_force(weight_limit, items):
+    all_combos = []
+    for i in range(1, len(items)+1):
+        # generate all combos using itertools.combinations
+        list_of_combos = list(combinations(items, i))
+        for combo in list_of_combos:
+            all_combos.append(combo)
+
+    max_value = -1
+    best_combo = None
+    for combo in all_combos:
+        value = 0 # of the entire combo
+        weight = 0 # of the entire combo
+        for item in combo:
+            value += item.value
+            weight += item.weight
+        if weight <= weight_limit: # could fit in knapsack
+            if value < max_value:
+                max_value = value
+                best_combo = combo
+
+
+# Stream lined solution
+def knapsack_brute_force_better(weight_limit, items):
+    max_value = -1
+    best_combo = None
+    for i in range(1, len(items)+1):
+        # generate all combos using itertools.combinations
+        list_of_combos = list(combinations(items, i))
+        for combo in list_of_combos:
+            # check the weight & value
+            value = 0 # of the entire combo
+            weight = 0 # of the entire combo
+            for item in combo:
+                value += item.value
+                weight += item.weight
+            if weight <= weight_limit: # could fit in knapsack
+                if value < max_value:
+                    max_value = value
+                    best_combo = combo
+
+
+# knapsack- Greedy solution
+# PROS: much faster then brute_force, much smarter than naive solution
+# CONS: may not get optimal result- will give good, but not best result
+def knapsack_greedy(weight_limit, items):
+    for i in items:
+        i.efficiency = i.value / i.weight
+
+    items.sort(keys=lambda x: x.efficiency, reverse=True)
+
+    sack = []
+    weight = 0
+    for i in items:
+        weight += i.weight
+        if weight > weight_limit:
+            return sack
+        else:
+            sack.append(i)
+
+
+# Fibonacci
+# following makes same recursive call calcs multiple times
+def fib(n):
+    # base case
+    if n == 1 or n == 0:
+        return 1
+    # recursive case
+    else:
+        return fib(n-1) + fib(n-2)
+
+print(fib(5))
+print(fib(15))
+print(fib(30))
+print(fib(35))
+
+'''
+Memoization will optimize functions that need to compute values several times for a single access. Caching will optimize functions that are called several times with the same parameters. In other words, Memoization will optimize the first access whether caching will only optimize recurrent accesses.
+'''
+# caching is just saving data for later
+# specifying place like in 
+def fib_cache(n, cache={}):
+    # base case
+    if n == 1 or n == 0:
+        return 1
+    # recursive case 
+    # elif n in cache: # alt to next line
+    elif n in cache.keys(): 
+        return cache[n]
+    else:
+        value = fib_cache(n-1) + fib_cache(n-2)
+        cache[n] = value
+        return value
+
+print('================')
+print(fib_cache(5))
+print(fib_cache(15))
+print(fib_cache(30))
+print(fib_cache(35))
+print(fib_cache(40))
