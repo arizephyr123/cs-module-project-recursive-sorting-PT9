@@ -1,5 +1,5 @@
 # TO-DO: Implement a recursive implementation of binary search
-def binary_search(arr, target, start, end):
+def binary_search(arr, target, start=0, end=len(arr)-1):
     if len(arr) < 1:
         return -1
     start = start
